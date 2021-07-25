@@ -5,6 +5,9 @@ import App from "./App";
 import "@vkontakte/vkui/dist/vkui.css";
 import { Router } from "@unexp/router";
 import { AdaptivityProvider, ConfigProvider } from "@vkontakte/vkui";
+import bridge from "@vkontakte/vk-bridge";
+
+bridge.send("VKWebAppInit", {});
 
 ReactDOM.render(
   <React.StrictMode>
