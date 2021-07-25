@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { useStructure, useSwipeBack } from "@unexp/router";
+// import css from './App.module.scss';
+import { AppRoot, Root, View } from "@vkontakte/vkui";
+import Main from "./common/pages/Main";
+import Commands from "./common/pages/Commands";
+import { routerNames } from "./common/helpers/router";
+import Command from "./common/pages/Command";
 
 function App() {
+  const structure = useStructure({
+    view: routerNames.home.id,
+    panel: routerNames.home.main,
+  });
+  let withSwipeBack = useSwipeBack();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppRoot>
+      <Root popout={structure.popout} activeView={structure.view}>
+        <View {...withSwipeBack} id="home" activePanel={structure.panel}>
+          <Main id={routerNames.home.main} />
+          <Commands id={routerNames.home.commands} />
+          {/* fixme спасибо vk ui за баги с переходами между одной и той же панелью*/}
+          <Command id={routerNames.home.command} />
+          <Command id={routerNames.home.command2} />
+        </View>
+      </Root>
+    </AppRoot>
   );
 }
 
