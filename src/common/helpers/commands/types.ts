@@ -1,27 +1,28 @@
 export interface Command {
   id: number;
-  idOriginal: number | null;
+  idOriginal?: number;
   alias: string[];
   accessLevel: number;
   help: string;
   helpExtended: string;
   commandImplicit: CommandImplicit[];
-  gameMode: boolean;
-  ignoreFilter: boolean;
-  privateMessages: number;
-  onlyPrivateMessages: boolean;
-  notPrivateMessages: boolean;
-  hide: boolean;
-  isOnlyBotCreator: boolean;
-  privateMessagesNotPeerId: boolean;
-  strictAliasMode: boolean;
-  donLevelRequired: number;
-  repeat: number;
-  timeLimit: string;
-  timeLimitConversation: string;
-  type: number;
-  arguments: Argument[];
+  gameMode?: boolean;
+  ignoreFilter?: boolean;
+  privateMessages?: PermissionPrivateMessagesTypeEnum;
+  onlyPrivateMessages?: boolean;
+  notPrivateMessages?: boolean;
+  hide?: boolean;
+  isOnlyBotCreator?: boolean;
+  privateMessagesNotPeerId?: boolean;
+  strictAliasMode?: boolean;
+  donLevelRequired?: number;
+  repeat?: RepeatCommandConversationEnum;
+  timeLimit?: string;
+  timeLimitConversation?: string;
+  type?: TypeCommandEnum;
+  arguments?: Argument[];
   modifiers?: number[];
+  relatedCommands: number[];
 }
 
 export interface CommandImplicit {
@@ -54,4 +55,26 @@ export enum TypeString {
   TypeStringNumber = "number[-]",
   TypeStringString = "string*",
   User = "user",
+}
+
+export enum RepeatCommandConversationEnum {
+  None,
+  Yes,
+  No,
+}
+
+export enum TypeCommandEnum {
+  Unselected,
+  ActionsUsers,
+  Settings,
+  Gaming,
+  Information,
+  Service,
+}
+
+export enum PermissionPrivateMessagesTypeEnum {
+  None,
+  No,
+  Yes,
+  YesImportant,
 }

@@ -12,15 +12,28 @@ import {
 import { useLocation, useParams, useRouter } from "@unexp/router";
 import { DefaultPageProps } from "../../helpers/types";
 import commandsService from "../../services/CommandsService";
-import { observer } from "mobx-react-lite";
 import { Icon28AddOutline } from "@vkontakte/icons";
 import CommandHelper from "../../helpers/commands/CommandHelper";
+import {
+  PermissionPrivateMessagesTypeEnum,
+  RepeatCommandConversationEnum,
+} from "../../helpers/commands/types";
+import { observer } from "mobx-react-lite";
 
 const Command: FC<DefaultPageProps> = () => {
   const { id } = useParams();
   const command = commandsService.getCommandById(id);
   const router = useRouter();
   const location = useLocation();
+
+  const pushCommandPanel = (id: number) => {
+    // fixme спасибо vk ui за баги с переходами между одной и той же панелью
+    router.push(
+      { panel: location.panel === "command" ? "command2" : "command" },
+      { id: id }
+    );
+  };
+
   return (
     <Panel>
       <PanelHeader
@@ -59,21 +72,83 @@ const Command: FC<DefaultPageProps> = () => {
         <Group
           header={<Header>⚡ Модификаторы</Header>}
           description={command.modifiers.map((commandImplicitId) => (
-            <Cell
-              onClick={() => {
-                router.push(
-                  {
-                    // fixme спасибо vk ui за баги с переходами между одной и той же панелью
-                    panel:
-                      location.panel === "command" ? "command2" : "command",
-                  },
-                  { id: commandImplicitId }
-                );
-              }}
-            >
+            <Cell onClick={() => pushCommandPanel(commandImplicitId)}>
               {commandsService.getCommandById(commandImplicitId).alias[0]}
             </Cell>
           ))}
+        />
+      )}
+      {command.commandImplicit?.length > 0 && (
+        <Group
+          header={<Header>⚡ Неявный модификатор</Header>}
+          description={command.commandImplicit.map((commandImplicit) => (
+            <>
+              <Group
+                header={<Header>💬 Названия</Header>}
+                description={commandImplicit.alias.join(", ")}
+              />
+              <Group
+                header={<Header>📎 Описание</Header>}
+                description={commandImplicit.helpExtended}
+              />
+              <Group
+                header={<Header>❓ Использование</Header>}
+                description={commandImplicit.help}
+              />
+            </>
+          ))}
+        />
+      )}
+      {!!command.relatedCommands?.length && (
+        <Group
+          header={<Header>🖇 Связанные команды</Header>}
+          description={command.relatedCommands.map((relatedCommandId) => (
+            <Cell onClick={() => pushCommandPanel(relatedCommandId)}>
+              {commandsService.getCommandById(relatedCommandId).alias[0]}
+            </Cell>
+          ))}
+        />
+      )}
+      <Group
+        header={<Header>🛠 Тип</Header>}
+        description={CommandHelper.getType(command.type)}
+      />
+      {command.repeat === RepeatCommandConversationEnum.Yes && (
+        <Group
+          header={
+            <Header>
+              🆘 Повторяет ответ в беседе, если была успешно выполнена в личных
+              сообщениях.
+            </Header>
+          }
+        />
+      )}
+      {CommandHelper.isAccessLs(command.privateMessages) && (
+        <Group
+          header={
+            <Header>
+              👁 Разрешена всем ролям в личных сообщениях бота
+              {command.privateMessages ===
+              PermissionPrivateMessagesTypeEnum.YesImportant
+                ? " (принудительно)"
+                : ""}
+            </Header>
+          }
+        />
+      )}
+
+      {command.notPrivateMessages && (
+        <Group
+          header={<Header>🚦 Можно использовать только в беседе.</Header>}
+        />
+      )}
+      {command.onlyPrivateMessages && (
+        <Group
+          header={
+            <Header>
+              🚦 Можно использовать только в личных сообщениях бота.
+            </Header>
+          }
         />
       )}
     </Panel>
