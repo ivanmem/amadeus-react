@@ -1,6 +1,5 @@
 import React from "react";
 import { useStructure, useSwipeBack } from "@unexp/router";
-// import css from './App.module.scss';
 import { AppRoot, Root, View } from "@vkontakte/vkui";
 import Main from "./common/pages/Main";
 import Commands from "./common/pages/Commands";
@@ -10,7 +9,7 @@ import Command from "./common/pages/Command";
 function App() {
   const structure = useStructure({
     view: routerNames.home.id,
-    panel: routerNames.home.main,
+    panel: routerNames.home.commands,
   });
   let withSwipeBack = useSwipeBack();
 
