@@ -21,5 +21,6 @@ module.exports = {
   rules: {
     "react-hooks/rules-of-hooks": "error", // Проверяем правила хуков
     "react-hooks/exhaustive-deps": "error", // Проверяем зависимости эффекта
+    "@typescript-eslint/ban-ts-comment": "off",
   },
 };

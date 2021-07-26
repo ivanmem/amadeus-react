@@ -1,7 +1,12 @@
 body {
   margin: 0;
+  --alternating-color: #0e0e0e;
+}
+
+body[scheme$="light"] {
+  --alternating-color: #fafafa;
 }
 
 .alternating-color:nth-child(odd) {
-  background-color: #fafafa !important;
+  background-color: var(--alternating-color) !important;
 }
