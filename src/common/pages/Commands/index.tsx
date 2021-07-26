@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useMemo } from "react";
 import {
   Cell,
   Div,
@@ -15,10 +15,11 @@ import commandsService from "../../services/CommandsService";
 import { observer } from "mobx-react-lite";
 import { Icon28AddOutline } from "@vkontakte/icons";
 import CommandHelper from "../../helpers/commands/CommandHelper";
+import { commandsStore } from "./common/CommandsStore";
 
 const Commands: FC<DefaultPageProps> = () => {
   const router = useRouter();
-  const [search, setSearch] = useState("");
+  const { search, setSearch } = commandsStore;
   const searchCommands = useMemo(
     () => commandsService.searchCommand(search),
     [search]
