@@ -4,7 +4,6 @@ import {
   AdaptivityProvider,
   AppRoot,
   ConfigProvider,
-  Platform,
   Root,
   View,
 } from "@vkontakte/vkui";

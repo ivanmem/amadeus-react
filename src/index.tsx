@@ -8,11 +8,14 @@ import bridge from "@vkontakte/vk-bridge";
 
 bridge.send("VKWebAppInit", {}).then();
 bridge.subscribe(({ detail: { type, data } }: any) => {
-  if (type === "VKWebAppUpdateConfig") {
-    const schemeAttribute = document.createAttribute("scheme");
-    schemeAttribute.value = data.scheme ? data.scheme : "client_light";
-    document.body.attributes.setNamedItem(schemeAttribute);
+  if (type !== "VKWebAppUpdateConfig") {
+    return;
   }
+
+  const schemeAttribute = document.createAttribute("scheme");
+  schemeAttribute.value = data.scheme ? data.scheme : "client_light";
+  document.body.attributes.setNamedItem(schemeAttribute);
+  document.getElementById("root")!.style.opacity = "1";
 });
 
 ReactDOM.render(
