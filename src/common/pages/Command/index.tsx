@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import {
+  CardScroll,
   Cell,
   Div,
   Group,
@@ -75,14 +76,19 @@ const Command: FC<DefaultPageProps> = () => {
         {!!command.modifiers?.length && (
           <Group
             header={<Header>⚡ Модификаторы</Header>}
-            description={command.modifiers.map((commandImplicitId) => (
-              <Cell
-                key={commandImplicitId}
-                onClick={() => pushCommandPanel(commandImplicitId)}
-              >
-                {commandsService.getCommandById(commandImplicitId).alias[0]}
-              </Cell>
-            ))}
+            description={
+              <CardScroll>
+                {command.modifiers.map((commandImplicitId) => (
+                  <Cell
+                    className="alternating-color"
+                    key={commandImplicitId}
+                    onClick={() => pushCommandPanel(commandImplicitId)}
+                  >
+                    {commandsService.getCommandById(commandImplicitId).alias[0]}
+                  </Cell>
+                ))}
+              </CardScroll>
+            }
           />
         )}
         {!!command.commandImplicit?.length && (
@@ -109,16 +115,37 @@ const Command: FC<DefaultPageProps> = () => {
         {!!command.relatedCommands?.length && (
           <Group
             header={<Header>🖇 Связанные команды</Header>}
-            description={command.relatedCommands.map((relatedCommandId) => (
-              <Cell
-                key={relatedCommandId}
-                onClick={() => pushCommandPanel(relatedCommandId)}
-              >
-                {commandsService.getCommandById(relatedCommandId).alias[0]}
-              </Cell>
-            ))}
+            description={
+              <CardScroll>
+                {command.relatedCommands
+                  .filter((x) => x != command.id)
+                  .map((relatedCommandId) => (
+                    <Cell
+                      className="alternating-color"
+                      key={relatedCommandId}
+                      onClick={() => pushCommandPanel(relatedCommandId)}
+                    >
+                      {
+                        commandsService.getCommandById(relatedCommandId)
+                          .alias[0]
+                      }
+                    </Cell>
+                  ))}
+              </CardScroll>
+            }
           />
         )}
+        {command.keys?.map((key) => (
+          <Group
+            key={key.alias[0]}
+            header={
+              <Header mode="primary" multiline>
+                🔑 {key.alias.join(", ")}
+              </Header>
+            }
+            description={key.description}
+          />
+        ))}
         <Group
           header={<Header>🛠 Тип</Header>}
           description={CommandHelper.getType(command.type)}
@@ -164,17 +191,6 @@ const Command: FC<DefaultPageProps> = () => {
             }
           />
         )}
-        {command.keys?.map((key) => (
-          <Group
-            key={key.alias[0]}
-            header={
-              <Header mode="primary" multiline>
-                🔑 {key.alias.join(", ")}
-              </Header>
-            }
-            description={key.description}
-          />
-        ))}
       </Div>
     </Panel>
   );

@@ -15,7 +15,6 @@ import commandsService from "../../services/CommandsService";
 import { observer } from "mobx-react-lite";
 import { Icon28AddOutline } from "@vkontakte/icons";
 import CommandHelper from "../../helpers/commands/CommandHelper";
-import css from "./index.module.scss";
 
 const Commands: FC<DefaultPageProps> = () => {
   const router = useRouter();
@@ -43,9 +42,10 @@ const Commands: FC<DefaultPageProps> = () => {
             onChange={(e) => setSearch(e.target.value)}
             after={null}
           />
-          <List className={css.Command}>
+          <List>
             {searchCommands.map((command) => (
               <Cell
+                className="alternating-color"
                 key={command.id}
                 onClick={() =>
                   router.push({ panel: "command" }, { id: command.id })
