@@ -1,0 +1,5 @@
+.Command {
+  & > *:nth-child(odd) {
+    background-color: #fafafa !important;
+  }
+}

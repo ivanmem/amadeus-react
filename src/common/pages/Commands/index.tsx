@@ -1,6 +1,7 @@
 import React, { FC, useMemo, useState } from "react";
 import {
   Cell,
+  Div,
   Group,
   List,
   Panel,
@@ -14,6 +15,7 @@ import commandsService from "../../services/CommandsService";
 import { observer } from "mobx-react-lite";
 import { Icon28AddOutline } from "@vkontakte/icons";
 import CommandHelper from "../../helpers/commands/CommandHelper";
+import css from "./index.module.scss";
 
 const Commands: FC<DefaultPageProps> = () => {
   let router = useRouter();
@@ -34,24 +36,26 @@ const Commands: FC<DefaultPageProps> = () => {
       >
         Команды
       </PanelHeader>
-      <Group>
-        <Search
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          after={null}
-        />
-        <List>
-          {searchCommands.map((command) => (
-            <Cell
-              onClick={() =>
-                router.push({ panel: "command" }, { id: command.id })
-              }
-            >
-              {CommandHelper.getCommandFullName(command.id)}
-            </Cell>
-          ))}
-        </List>
-      </Group>
+      <Div>
+        <Group>
+          <Search
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            after={null}
+          />
+          <List className={css.Command}>
+            {searchCommands.map((command, i) => (
+              <Cell
+                onClick={() =>
+                  router.push({ panel: "command" }, { id: command.id })
+                }
+              >
+                {CommandHelper.getCommandFullName(command.id)}
+              </Cell>
+            ))}
+          </List>
+        </Group>
+      </Div>
     </Panel>
   );
 };
