@@ -9,7 +9,6 @@ const Main: FC<DefaultPageProps> = (props) => {
   return (
     <Panel>
       <PanelHeader>Амадеус</PanelHeader>
-
       <SimpleCell onClick={() => router.push({ panel: "commands" })}>
         Команды
       </SimpleCell>

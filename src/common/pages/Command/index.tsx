@@ -2,13 +2,12 @@ import React, { FC } from "react";
 import {
   Cell,
   Group,
-  InfoRow,
+  Header,
   Panel,
   PanelHeader,
   PanelHeaderBack,
   PanelHeaderButton,
   PanelHeaderContent,
-  SimpleCell,
 } from "@vkontakte/vkui";
 import { useLocation, useParams, useRouter } from "@unexp/router";
 import { DefaultPageProps } from "../../helpers/types";
@@ -36,57 +35,46 @@ const Command: FC<DefaultPageProps> = () => {
           {CommandHelper.getCommandFullName(id)}
         </PanelHeaderContent>
       </PanelHeader>
-      <Group>
-        <SimpleCell>
-          <InfoRow header="📎 Описание">{command.helpExtended}</InfoRow>
-        </SimpleCell>
-      </Group>
-      <Group>
-        <SimpleCell>
-          <InfoRow
-            header={`💬 Названия${
-              command.strictAliasMode ? " (опечатки запрещены)" : ""
-            }`}
-          >
-            {command.alias.join(", ")}
-          </InfoRow>
-        </SimpleCell>
-      </Group>
-      <Group>
-        <SimpleCell>
-          <InfoRow header="🔧 Аргументы">{command.help}</InfoRow>
-        </SimpleCell>
-      </Group>
-      <Group>
-        <SimpleCell>
-          <InfoRow header="⚠ Требуемая роль">
-            {CommandHelper.getLevelText(command.accessLevel)}
-          </InfoRow>
-        </SimpleCell>
-      </Group>
+      <Group
+        header={<Header>📎 Описание</Header>}
+        description={command.helpExtended}
+      />
+      <Group
+        header={
+          <Header>{`💬 Названия${
+            command.strictAliasMode ? " (опечатки запрещены)" : ""
+          }`}</Header>
+        }
+        description={command.alias.join(", ")}
+      />
+      <Group
+        header={<Header>🔧 Аргументы</Header>}
+        description={command.help}
+      />
+      <Group
+        header={<Header>⚠ Требуемая роль</Header>}
+        description={CommandHelper.getLevelText(command.accessLevel)}
+      />
       {!!command.modifiers?.length && (
-        <Group>
-          <SimpleCell>
-            <InfoRow header="⚡ Модификаторы">
-              {command.modifiers.map((commandImplicitId) => (
-                <Cell
-                  onClick={() => {
-                    router.push(
-                      {
-                        // fixme спасибо vk ui за баги с переходами между одной и той же панелью
-                        panel:
-                          location.panel === "command" ? "command2" : "command",
-                      },
-                      { id: commandImplicitId }
-                    );
-                  }}
-                >
-                  {commandsService.getCommandById(commandImplicitId).alias[0]}
-                </Cell>
-              ))}
-            </InfoRow>
-          </SimpleCell>
-        </Group>
+        <Group
+          header={<Header>⚡ Модификаторы</Header>}
+          description={command.modifiers.map((commandImplicitId) => (
+            <Cell
+              onClick={() => {
+                router.push(
+                  {
+                    // fixme спасибо vk ui за баги с переходами между одной и той же панелью
+                    panel:
+                      location.panel === "command" ? "command2" : "command",
+                  },
+                  { id: commandImplicitId }
+                );
+              }}
+            >
+              {commandsService.getCommandById(commandImplicitId).alias[0]}
+            </Cell>
+          ))}
+        />
       )}
     </Panel>
   );
