@@ -18,7 +18,7 @@ import CommandHelper from "../../helpers/commands/CommandHelper";
 import css from "./index.module.scss";
 
 const Commands: FC<DefaultPageProps> = () => {
-  let router = useRouter();
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const searchCommands = useMemo(
     () => commandsService.searchCommand(search),
@@ -44,8 +44,9 @@ const Commands: FC<DefaultPageProps> = () => {
             after={null}
           />
           <List className={css.Command}>
-            {searchCommands.map((command, i) => (
+            {searchCommands.map((command) => (
               <Cell
+                key={command.id}
                 onClick={() =>
                   router.push({ panel: "command" }, { id: command.id })
                 }

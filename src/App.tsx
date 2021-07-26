@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { useStructure, useSwipeBack } from "@unexp/router";
 import { AppRoot, Root, View } from "@vkontakte/vkui";
 import Main from "./common/pages/Main";
@@ -6,12 +6,12 @@ import Commands from "./common/pages/Commands";
 import { routerNames } from "./common/helpers/router";
 import Command from "./common/pages/Command";
 
-function App() {
+const App: FC = () => {
   const structure = useStructure({
     view: routerNames.home.id,
     panel: routerNames.home.commands,
   });
-  let withSwipeBack = useSwipeBack();
+  const withSwipeBack = useSwipeBack();
 
   return (
     <AppRoot>
@@ -26,6 +26,6 @@ function App() {
       </Root>
     </AppRoot>
   );
-}
+};
 
 export default App;

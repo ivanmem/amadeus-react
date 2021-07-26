@@ -15,13 +15,13 @@ class CommandHelper {
     return number?.toString() || "";
   }
 
-  static getLevelText(accessLevel: number = 0) {
+  static getLevelText(accessLevel = 0): string {
     return `${this.getNameLevel(accessLevel)} (${this.getSmileNumber(
       accessLevel
     )} лвл)`;
   }
 
-  static getNameLevel(accessLevel: number) {
+  static getNameLevel(accessLevel: number): string {
     switch (accessLevel) {
       case 11:
         return "Создатель";
@@ -52,7 +52,7 @@ class CommandHelper {
     }
   }
 
-  static getCommandFullName(id: number | string) {
+  static getCommandFullName(id: number | string): string {
     const command = commandsService.getCommandById(id);
     if (!command) {
       return "Неизвестная команда";
@@ -67,14 +67,14 @@ class CommandHelper {
     return `${commandOriginal.alias[0]} ${command.alias[0]}`;
   }
 
-  static getType(type = TypeCommandEnum.Unselected) {
+  static getType(type = TypeCommandEnum.Unselected): string {
     return TYPES_COMMAND[type];
   }
 
   // Разрешена ли команда в личных сообщениях
   static isAccessLs(
     privateMessages: PermissionPrivateMessagesTypeEnum = PermissionPrivateMessagesTypeEnum.No
-  ) {
+  ): boolean {
     return (
       privateMessages !== PermissionPrivateMessagesTypeEnum.No &&
       privateMessages !== PermissionPrivateMessagesTypeEnum.None

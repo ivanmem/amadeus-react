@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import {
-  Card,
   Cell,
   Div,
   Group,
@@ -30,10 +29,12 @@ const Command: FC<DefaultPageProps> = () => {
 
   const pushCommandPanel = (id: number) => {
     // fixme спасибо vk ui за баги с переходами между одной и той же панелью
-    router.push(
-      { panel: location.panel === "command" ? "command2" : "command" },
-      { id: id }
-    );
+    router
+      .push(
+        { panel: location.panel === "command" ? "command2" : "command" },
+        { id: id }
+      )
+      .then();
   };
 
   return (
@@ -75,13 +76,16 @@ const Command: FC<DefaultPageProps> = () => {
           <Group
             header={<Header>⚡ Модификаторы</Header>}
             description={command.modifiers.map((commandImplicitId) => (
-              <Cell onClick={() => pushCommandPanel(commandImplicitId)}>
+              <Cell
+                key={commandImplicitId}
+                onClick={() => pushCommandPanel(commandImplicitId)}
+              >
                 {commandsService.getCommandById(commandImplicitId).alias[0]}
               </Cell>
             ))}
           />
         )}
-        {command.commandImplicit?.length > 0 && (
+        {!!command.commandImplicit?.length && (
           <Group
             header={<Header>⚡ Неявный модификатор</Header>}
             description={command.commandImplicit.map((commandImplicit) => (
@@ -106,7 +110,10 @@ const Command: FC<DefaultPageProps> = () => {
           <Group
             header={<Header>🖇 Связанные команды</Header>}
             description={command.relatedCommands.map((relatedCommandId) => (
-              <Cell onClick={() => pushCommandPanel(relatedCommandId)}>
+              <Cell
+                key={relatedCommandId}
+                onClick={() => pushCommandPanel(relatedCommandId)}
+              >
                 {commandsService.getCommandById(relatedCommandId).alias[0]}
               </Cell>
             ))}
@@ -157,6 +164,17 @@ const Command: FC<DefaultPageProps> = () => {
             }
           />
         )}
+        {command.keys?.map((key) => (
+          <Group
+            key={key.alias[0]}
+            header={
+              <Header mode="primary" multiline>
+                🔑 {key.alias.join(", ")}
+              </Header>
+            }
+            description={key.description}
+          />
+        ))}
       </Div>
     </Panel>
   );

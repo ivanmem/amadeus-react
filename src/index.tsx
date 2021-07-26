@@ -7,7 +7,7 @@ import { Router } from "@unexp/router";
 import { AdaptivityProvider, ConfigProvider } from "@vkontakte/vkui";
 import bridge from "@vkontakte/vk-bridge";
 
-bridge.send("VKWebAppInit", {});
+bridge.send("VKWebAppInit", {}).then();
 
 ReactDOM.render(
   <React.StrictMode>

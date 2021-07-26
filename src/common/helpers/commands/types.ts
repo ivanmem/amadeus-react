@@ -5,7 +5,7 @@ export interface Command {
   accessLevel: number;
   help: string;
   helpExtended: string;
-  commandImplicit: CommandImplicit[];
+  commandImplicit?: CommandImplicit[];
   gameMode?: boolean;
   ignoreFilter?: boolean;
   privateMessages?: PermissionPrivateMessagesTypeEnum;
@@ -22,7 +22,8 @@ export interface Command {
   type?: TypeCommandEnum;
   arguments?: Argument[];
   modifiers?: number[];
-  relatedCommands: number[];
+  relatedCommands?: number[];
+  keys?: CommandKey[];
 }
 
 export interface CommandImplicit {
@@ -42,6 +43,11 @@ export interface Argument {
   isCheckRequired: boolean;
   newLine: boolean;
   help: string;
+}
+
+export interface CommandKey {
+  alias: string[];
+  description: string;
 }
 
 export enum TypeString {

@@ -4,7 +4,7 @@ import { useRouter } from "@unexp/router";
 import { DefaultPageProps } from "../../helpers/types";
 
 const Main: FC<DefaultPageProps> = (props) => {
-  let router = useRouter();
+  const router = useRouter();
 
   return (
     <Panel>
