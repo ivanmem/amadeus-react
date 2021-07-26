@@ -85,5 +85,3 @@ class CommandsService {
 const commandsService = new CommandsService();
 
 export default commandsService;
-
-console.log(commandsService.commandsAllVariantsNames);
