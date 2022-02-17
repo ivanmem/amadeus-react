@@ -33,7 +33,6 @@ const Commands: FC<DefaultPageProps> = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             after={null}
-            autoFocus
             onKeyDown={onSearchKeyDown}
           />
           {renderSearchResult}
