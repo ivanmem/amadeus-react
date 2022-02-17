@@ -26,7 +26,7 @@ class CommandsService {
   searchCommand(_search: string): Command[] {
     const search = _search.trim().toLowerCase();
     if (search.length === 0) {
-      return this.commandsOriginal;
+      return [];
     }
 
     return (
@@ -34,6 +34,17 @@ class CommandsService {
         x.names.find((name) => name.includes(search))
       ) || []
     ).map((x) => commandsService.getCommandById(x.id));
+  }
+
+  searchDescription(_search: string): Command[] {
+    const search = _search.trim().toLowerCase();
+    if (search.length === 0) {
+      return [];
+    }
+
+    return commandsService.commands.filter((x) =>
+      x.helpExtended.toLowerCase().includes(search)
+    );
   }
 
   // возвращает все команды и их модификаторы
