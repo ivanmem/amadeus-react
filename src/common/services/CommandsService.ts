@@ -1,8 +1,6 @@
 import { makeAutoObservable } from "mobx";
-import _commandsJson from "../../assets/json/commandsAmadeus.json";
 import { Command } from "../helpers/commands/types";
 import { orderBy } from "lodash";
-const commandsJson = _commandsJson as any;
 
 interface CommandAllVariantsNames {
   id: number;
@@ -10,12 +8,67 @@ interface CommandAllVariantsNames {
 }
 
 class CommandsService {
+  commandsJson: Record<string, Command> = {};
+
   constructor() {
     makeAutoObservable(this);
   }
 
+  // возвращает все команды и их модификаторы
+  get commands(): Command[] {
+    const commands = Object.keys(this.commandsJson).map(
+      (key) => this.commandsJson[key]
+    );
+    return this.orderBy(commands);
+  }
+
+  // возвращает только основные команды (без их модификаторов)
+  get commandsOriginal(): Command[] {
+    const commands = Object.keys(this.commandsJson)
+      .filter((key) => Number(key) > 0)
+      .map((key) => this.commandsJson[key]);
+    return this.orderBy(commands);
+  }
+
+  // возвращает только модификаторы команд
+  get commandsModifiers(): Command[] {
+    const commands = Object.keys(this.commandsJson)
+      .filter((key) => Number(key) < 0)
+      .map((key) => this.commandsJson[key]);
+    return this.orderBy(commands);
+  }
+
+  get commandsAllVariantsNames(): CommandAllVariantsNames[] {
+    const commandsOriginal: CommandAllVariantsNames[] =
+      this.commandsOriginal.map((command) => ({
+        id: command.id,
+        names: command.alias,
+      }));
+
+    const commandsModifiers: CommandAllVariantsNames[] =
+      this.commandsModifiers.map((command) => {
+        const commandOriginal = this.getCommandById(command.idOriginal!);
+        return {
+          id: command.id,
+          names: commandOriginal.alias
+            .map((aliasOriginal) => [
+              ...command.alias.map((alias) => `${aliasOriginal} ${alias}`),
+            ])
+            .flat(),
+        };
+      });
+
+    return [...commandsOriginal, ...commandsModifiers];
+  }
+
+  async init() {
+    this.commandsJson = await (
+      await fetch("https://cm.animebots.com/api/Commands", { method: "GET" })
+    ).json();
+  }
+
   getCommandById(id: string | number): Command {
-    return commandsJson[id];
+    return this.commandsJson[id];
   }
 
   // сортировка команд по первому алиасу
@@ -45,51 +98,6 @@ class CommandsService {
     return commandsService.commands.filter((x) =>
       x.helpExtended.toLowerCase().includes(search)
     );
-  }
-
-  // возвращает все команды и их модификаторы
-  get commands(): Command[] {
-    const commands = Object.keys(commandsJson).map((key) => commandsJson[key]);
-    return this.orderBy(commands);
-  }
-
-  // возвращает только основные команды (без их модификаторов)
-  get commandsOriginal(): Command[] {
-    const commands = Object.keys(commandsJson)
-      .filter((key) => Number(key) > 0)
-      .map((key) => commandsJson[key]);
-    return this.orderBy(commands);
-  }
-
-  // возвращает только модификаторы команд
-  get commandsModifiers(): Command[] {
-    const commands = Object.keys(commandsJson)
-      .filter((key) => Number(key) < 0)
-      .map((key) => commandsJson[key]);
-    return this.orderBy(commands);
-  }
-
-  get commandsAllVariantsNames(): CommandAllVariantsNames[] {
-    const commandsOriginal: CommandAllVariantsNames[] =
-      this.commandsOriginal.map((command) => ({
-        id: command.id,
-        names: command.alias,
-      }));
-
-    const commandsModifiers: CommandAllVariantsNames[] =
-      this.commandsModifiers.map((command) => {
-        const commandOriginal = this.getCommandById(command.idOriginal!);
-        return {
-          id: command.id,
-          names: commandOriginal.alias
-            .map((aliasOriginal) => [
-              ...command.alias.map((alias) => `${aliasOriginal} ${alias}`),
-            ])
-            .flat(),
-        };
-      });
-
-    return [...commandsOriginal, ...commandsModifiers];
   }
 }
 
