@@ -1,6 +1,7 @@
-import { Header, List, ScreenSpinner } from "@vkontakte/vkui";
+import { Group, Header, List, ScreenSpinner } from "@vkontakte/vkui";
+import { Icon12ErrorCircle } from "@vkontakte/icons";
 import commandsService from "../../services/CommandsService";
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useCommandSearch } from "./useCommandSearch";
 import { useRenderCommand } from "./useRenderCommand";
 
@@ -32,16 +33,32 @@ export const useRenderSearchResult = () => {
     return (
       <>
         {Boolean(searchCommands.length) && (
-          <>
-            <Header>Совпадение по названию:</Header>
+          <Group
+            header={
+              <Header>
+                <div className="row-gap5">
+                  <Icon12ErrorCircle />
+                  Совпадение по названию:
+                </div>
+              </Header>
+            }
+          >
             <List>{searchCommands.map(renderCommand)}</List>
-          </>
+          </Group>
         )}
         {Boolean(searchDescriptions.length) && (
-          <>
-            <Header>Совпадение по описанию:</Header>
+          <Group
+            header={
+              <Header>
+                <div className="row-gap5">
+                  <Icon12ErrorCircle />
+                  Совпадение по описанию:
+                </div>
+              </Header>
+            }
+          >
             <List>{searchDescriptions.map(renderCommandDescription)}</List>
-          </>
+          </Group>
         )}
       </>
     );

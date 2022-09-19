@@ -1,15 +1,16 @@
 import React, { FC } from "react";
 import {
-  CardScroll,
-  Cell,
+  Button,
   Div,
   Group,
   Header,
+  InfoRow,
   Panel,
   PanelHeader,
   PanelHeaderBack,
   PanelHeaderButton,
   PanelHeaderContent,
+  SimpleCell,
 } from "@vkontakte/vkui";
 import { useLocation, useParams, useRouter } from "@unexp/router";
 import { DefaultPageProps } from "../../helpers/types";
@@ -41,8 +42,8 @@ const Command: FC<DefaultPageProps> = () => {
   return (
     <Panel>
       <PanelHeader
-        left={<PanelHeaderBack onClick={router.back} />}
-        right={
+        before={<PanelHeaderBack onClick={router.back} />}
+        after={
           <PanelHeaderButton>
             <Icon28AddOutline />
           </PanelHeaderButton>
@@ -53,144 +54,145 @@ const Command: FC<DefaultPageProps> = () => {
         </PanelHeaderContent>
       </PanelHeader>
       <Div>
-        <Group
-          header={<Header>📎 Описание</Header>}
-          description={command.helpExtended}
-        />
-        <Group
-          header={
-            <Header>{`💬 Названия${
-              command.strictAliasMode ? " (опечатки запрещены)" : ""
-            }`}</Header>
-          }
-          description={command.alias.join(", ")}
-        />
-        <Group
-          header={<Header>🔧 Аргументы</Header>}
-          description={command.help}
-        />
-        <Group
-          header={<Header>⚠ Требуемая роль</Header>}
-          description={CommandHelper.getLevelText(command.accessLevel)}
-        />
-        {!!command.modifiers?.length && (
-          <Group
-            header={<Header>⚡ Модификаторы</Header>}
-            description={
-              <CardScroll>
-                {command.modifiers.map((commandImplicitId) => (
-                  <Cell
-                    className="alternating-color"
-                    key={commandImplicitId}
-                    onClick={() => pushCommandPanel(commandImplicitId)}
-                  >
-                    {commandsService.getCommandById(commandImplicitId).alias[0]}
-                  </Cell>
-                ))}
-              </CardScroll>
-            }
-          />
-        )}
-        {!!command.commandImplicit?.length && (
-          <Group
-            header={<Header>⚡ Неявный модификатор</Header>}
-            description={command.commandImplicit.map((commandImplicit) => (
-              <>
-                <Group
-                  header={<Header>💬 Названия</Header>}
-                  description={commandImplicit.alias.join(", ")}
-                />
-                <Group
-                  header={<Header>📎 Описание</Header>}
-                  description={commandImplicit.helpExtended}
-                />
-                <Group
-                  header={<Header>❓ Использование</Header>}
-                  description={commandImplicit.help}
-                />
-              </>
-            ))}
-          />
-        )}
-        {!!command.relatedCommands?.length && (
-          <Group
-            header={<Header>🖇 Связанные команды</Header>}
-            description={
-              <CardScroll>
-                {command.relatedCommands
-                  .filter((x) => x != command.id)
-                  .map((relatedCommandId) => (
-                    <Cell
-                      className="alternating-color"
-                      key={relatedCommandId}
-                      onClick={() => pushCommandPanel(relatedCommandId)}
+        <Group>
+          <SimpleCell disabled multiline>
+            <InfoRow header="📎 Описание">{command.helpExtended}</InfoRow>
+          </SimpleCell>
+          <SimpleCell disabled multiline>
+            <InfoRow
+              header={`💬 Названия${
+                command.strictAliasMode ? " (опечатки запрещены)" : ""
+              }`}
+            >
+              {command.alias.join(", ")}
+            </InfoRow>
+          </SimpleCell>
+
+          <SimpleCell disabled multiline>
+            <InfoRow header="🔧 Аргументы">{command.help}</InfoRow>
+          </SimpleCell>
+
+          <SimpleCell disabled multiline>
+            <InfoRow header="⚠ Требуемая роль">
+              {CommandHelper.getLevelText(command.accessLevel)}
+            </InfoRow>
+          </SimpleCell>
+
+          {!!command.modifiers?.length && (
+            <SimpleCell disabled multiline>
+              <InfoRow header="⚡ Модификаторы">
+                <Div className="row-gap5 overflow">
+                  {command.modifiers.map((commandImplicitId) => (
+                    <Button
+                      key={commandImplicitId}
+                      style={{ padding: 0 }}
+                      onClick={() => pushCommandPanel(commandImplicitId)}
                     >
                       {
-                        commandsService.getCommandById(relatedCommandId)
+                        commandsService.getCommandById(commandImplicitId)
                           .alias[0]
                       }
-                    </Cell>
+                    </Button>
                   ))}
-              </CardScroll>
-            }
-          />
-        )}
-        {command.keys?.map((key) => (
-          <Group
-            key={key.alias[0]}
-            header={
-              <Header mode="primary" multiline>
-                🔑 {key.alias.join(", ")}
-              </Header>
-            }
-            description={key.description}
-          />
-        ))}
-        <Group
-          header={<Header>🛠 Тип</Header>}
-          description={CommandHelper.getType(command.type)}
-        />
-        {command.repeat === RepeatCommandConversationEnum.Yes && (
-          <Group
-            header={
-              <Header mode="primary" multiline>
-                🆘 Повторяет ответ в беседе, если была успешно выполнена в
-                личных сообщениях.
-              </Header>
-            }
-          />
-        )}
-        {CommandHelper.isAccessLs(command.privateMessages) && (
-          <Group
-            header={
-              <Header mode="primary" multiline>
-                👁 Разрешена всем ролям в личных сообщениях бота
-                {command.privateMessages ===
-                PermissionPrivateMessagesTypeEnum.YesImportant
-                  ? " (принудительно)"
-                  : ""}
-              </Header>
-            }
-          />
-        )}
-        {command.notPrivateMessages && (
-          <Group
-            header={
-              <Header mode="primary" multiline>
-                🚦 Можно использовать только в беседе.
-              </Header>
-            }
-          />
-        )}
-        {command.onlyPrivateMessages && (
-          <Group
-            header={
-              <Header mode="primary" multiline>
-                🚦 Можно использовать только в личных сообщениях бота.
-              </Header>
-            }
-          />
-        )}
+                </Div>
+              </InfoRow>
+            </SimpleCell>
+          )}
+
+          {!!command.commandImplicit?.length && (
+            <SimpleCell disabled multiline>
+              {command.commandImplicit.map((commandImplicit) => (
+                <InfoRow
+                  key={commandImplicit.alias[0]}
+                  header="⚡ Неявный модификатор"
+                >
+                  <SimpleCell disabled multiline>
+                    <InfoRow header="💬 Названия">
+                      {commandImplicit.alias.join(", ")}
+                    </InfoRow>
+                  </SimpleCell>
+                  <SimpleCell disabled multiline>
+                    <InfoRow header="📎 Описание">
+                      {commandImplicit.helpExtended}
+                    </InfoRow>
+                  </SimpleCell>
+                  <SimpleCell disabled multiline>
+                    <InfoRow header="❓ Использование">
+                      {commandImplicit.help}
+                    </InfoRow>
+                  </SimpleCell>
+                </InfoRow>
+              ))}
+            </SimpleCell>
+          )}
+
+          {!!command.relatedCommands?.length && (
+            <SimpleCell disabled multiline>
+              <InfoRow header="🖇 Связанные команды">
+                {
+                  <Div className="row-gap5 overflow">
+                    {command.relatedCommands
+                      .filter((x) => x != command.id)
+                      .map((relatedCommandId) => (
+                        <Button
+                          key={relatedCommandId}
+                          onClick={() => pushCommandPanel(relatedCommandId)}
+                        >
+                          {
+                            commandsService.getCommandById(relatedCommandId)
+                              .alias[0]
+                          }
+                        </Button>
+                      ))}
+                  </Div>
+                }
+              </InfoRow>
+            </SimpleCell>
+          )}
+
+          {command.keys?.map((key) => (
+            <SimpleCell key={key.alias[0]} disabled multiline>
+              <InfoRow header={`🔑 ${key.alias.join(", ")}`}>
+                {key.description}
+              </InfoRow>
+            </SimpleCell>
+          ))}
+
+          <SimpleCell disabled multiline>
+            <InfoRow header="🛠 Тип">
+              {CommandHelper.getType(command.type)}
+            </InfoRow>
+          </SimpleCell>
+
+          {command.repeat === RepeatCommandConversationEnum.Yes && (
+            <Header mode="primary" multiline>
+              🆘 Повторяет ответ в беседе, если была успешно выполнена в личных
+              сообщениях.
+            </Header>
+          )}
+
+          {CommandHelper.isAccessLs(command.privateMessages) && (
+            <Header mode="primary" multiline>
+              👁 Разрешена всем ролям в личных сообщениях бота
+              {command.privateMessages ===
+              PermissionPrivateMessagesTypeEnum.YesImportant
+                ? " (принудительно)"
+                : ""}
+            </Header>
+          )}
+
+          {command.notPrivateMessages && (
+            <Header mode="primary" multiline>
+              🚦 Можно использовать только в беседе.
+            </Header>
+          )}
+
+          {command.onlyPrivateMessages && (
+            <Header mode="primary" multiline>
+              🚦 Можно использовать только в личных сообщениях бота.
+            </Header>
+          )}
+        </Group>
       </Div>
     </Panel>
   );
