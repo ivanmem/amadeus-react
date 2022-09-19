@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { Command } from "../helpers/commands/types";
 import { orderBy } from "lodash";
+import CommandHelper from "../helpers/commands/CommandHelper";
 
 interface CommandAllVariantsNames {
   id: number;
@@ -71,9 +72,13 @@ class CommandsService {
     return this.commandsJson[id];
   }
 
-  // сортировка команд по первому алиасу
+  // сортировка команд по полному названию
   orderBy(commands: Command[]) {
-    return orderBy(commands, (x) => x.alias[0], ["asc"]);
+    return orderBy(
+      commands,
+      [(x) => CommandHelper.getCommandFullName(x.id)],
+      "asc"
+    );
   }
 
   searchCommand(_search: string): Command[] {
