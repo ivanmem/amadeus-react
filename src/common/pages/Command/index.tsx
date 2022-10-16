@@ -150,6 +150,25 @@ const Command: FC<DefaultPageProps> = () => {
             </SimpleCell>
           )}
 
+          <SimpleCell disabled multiline>
+            <InfoRow header={`✏ Полный пример (со всеми аргументами)`}>
+              <pre style={{ userSelect: "contain" }}>
+                {command.templateString}
+              </pre>
+            </InfoRow>
+          </SimpleCell>
+          {command.templateString != command.minTemplateString && (
+            <SimpleCell disabled multiline>
+              <InfoRow
+                header={`✏ Минимальный пример (только с обязательными аргументами)`}
+              >
+                <pre style={{ userSelect: "contain" }}>
+                  {command.minTemplateString}
+                </pre>
+              </InfoRow>
+            </SimpleCell>
+          )}
+
           {command.keys?.map((key) => (
             <SimpleCell key={key.alias[0]} disabled multiline>
               <InfoRow header={`🔑 ${key.alias.join(", ")}`}>

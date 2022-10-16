@@ -5,7 +5,6 @@ import App from "./App";
 import "@vkontakte/vkui/dist/vkui.css";
 import "@vkontakte/vkui/dist/fonts.css";
 import "@vkontakte/vkui/dist/components.css";
-import "@vkontakte/vkui/dist/unstable.css";
 import { Router } from "@unexp/router";
 import bridge from "@vkontakte/vk-bridge";
 import CommandsService from "./common/services/CommandsService";

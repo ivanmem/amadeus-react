@@ -24,6 +24,8 @@ export interface Command {
   modifiers?: number[];
   relatedCommands?: number[];
   keys?: CommandKey[];
+  templateString: string;
+  minTemplateString: string;
 }
 
 export interface CommandImplicit {
