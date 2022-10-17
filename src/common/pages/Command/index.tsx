@@ -58,6 +58,7 @@ const Command: FC<DefaultPageProps> = () => {
           <SimpleCell disabled multiline>
             <InfoRow header="📎 Описание">{command.helpExtended}</InfoRow>
           </SimpleCell>
+
           <SimpleCell disabled multiline>
             <InfoRow
               header={`💬 Названия${
@@ -68,9 +69,33 @@ const Command: FC<DefaultPageProps> = () => {
             </InfoRow>
           </SimpleCell>
 
+          {command.argumentsListString.length > 0 && (
+            <SimpleCell disabled multiline>
+              <InfoRow header="🔧 Аргументы">
+                <pre>{command.argumentsListString}</pre>
+              </InfoRow>
+            </SimpleCell>
+          )}
+
           <SimpleCell disabled multiline>
-            <InfoRow header="🔧 Аргументы">{command.help}</InfoRow>
+            <InfoRow header={`✏ Полный пример (со всеми аргументами)`}>
+              <pre style={{ userSelect: "contain" }}>
+                {command.templateString}
+              </pre>
+            </InfoRow>
           </SimpleCell>
+
+          {command.templateString != command.minTemplateString && (
+            <SimpleCell disabled multiline>
+              <InfoRow
+                header={`✏ Минимальный пример (только с обязательными аргументами)`}
+              >
+                <pre style={{ userSelect: "contain" }}>
+                  {command.minTemplateString}
+                </pre>
+              </InfoRow>
+            </SimpleCell>
+          )}
 
           <SimpleCell disabled multiline>
             <InfoRow header="⚠ Требуемая роль">
@@ -146,25 +171,6 @@ const Command: FC<DefaultPageProps> = () => {
                       ))}
                   </Div>
                 }
-              </InfoRow>
-            </SimpleCell>
-          )}
-
-          <SimpleCell disabled multiline>
-            <InfoRow header={`✏ Полный пример (со всеми аргументами)`}>
-              <pre style={{ userSelect: "contain" }}>
-                {command.templateString}
-              </pre>
-            </InfoRow>
-          </SimpleCell>
-          {command.templateString != command.minTemplateString && (
-            <SimpleCell disabled multiline>
-              <InfoRow
-                header={`✏ Минимальный пример (только с обязательными аргументами)`}
-              >
-                <pre style={{ userSelect: "contain" }}>
-                  {command.minTemplateString}
-                </pre>
               </InfoRow>
             </SimpleCell>
           )}

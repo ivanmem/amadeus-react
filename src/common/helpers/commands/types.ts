@@ -3,7 +3,7 @@ export interface Command {
   idOriginal?: number;
   alias: string[];
   accessLevel: number;
-  help: string;
+  argumentsListString: string;
   helpExtended: string;
   commandImplicit?: CommandImplicit[];
   gameMode?: boolean;
