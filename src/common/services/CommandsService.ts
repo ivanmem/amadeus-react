@@ -64,7 +64,7 @@ class CommandsService {
 
   async init() {
     this.commandsJson = await (
-      await fetch("https://cm.animebots.com/api/Commands", { method: "GET" })
+      await fetch("/commands.json", { method: "GET" })
     ).json();
   }
 
