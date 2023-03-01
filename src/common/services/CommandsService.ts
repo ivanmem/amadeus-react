@@ -63,9 +63,15 @@ class CommandsService {
   }
 
   async init() {
-    this.commandsJson = await (
-      await fetch("/commands.json", { method: "GET" })
-    ).json();
+    try {
+      this.commandsJson = await (
+        await fetch("https://amadeus.ddns.net/api/Commands", { method: "GET" })
+      ).json();
+    } catch {
+      this.commandsJson = await (
+        await fetch("/commands.json", { method: "GET" })
+      ).json();
+    }
   }
 
   getCommandById(id: string | number): Command {
