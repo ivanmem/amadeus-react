@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import "@vkontakte/vkui/dist/vkui.css";
-import "@vkontakte/vkui/dist/fonts.css";
 import "@vkontakte/vkui/dist/components.css";
 import { Router } from "@unexp/router";
 import bridge from "@vkontakte/vk-bridge";

@@ -19,7 +19,7 @@ const Commands: FC<DefaultPageProps> = () => {
   return (
     <Panel>
       <PanelHeader
-        right={
+        after={
           <PanelHeaderButton>
             <Icon28AddOutline />
           </PanelHeaderButton>
