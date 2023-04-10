@@ -22,7 +22,7 @@ const App: FC = () => {
     <ConfigProvider>
       <AdaptivityProvider>
         <AppRoot>
-          <Root popout={structure.popout} activeView={structure.view}>
+          <Root activeView={structure.view}>
             <View {...withSwipeBack} id="home" activePanel={structure.panel}>
               <Main id={routerNames.home.main} />
               <Commands id={routerNames.home.commands} />
